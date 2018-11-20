@@ -50,9 +50,37 @@ class User implements UserInterface
      */
     private $articles;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="BlogBundle\Entity\Role")
+     * @ORM\JoinTable(name="users_roles",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *     )
+     */
+    private $roles;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->roles=new ArrayCollection();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return in_array("ROLE_ADMIN", $this->getRoles());
+    }
+
+    /**
+     * @param Article $article
+     * @return bool
+     */
+    public function isAuthor(Article $article)
+    {
+        return $article->getAuthorId() == $this->getId();
     }
 
     /**
@@ -171,7 +199,23 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return[];
+        $stringRoles = [];
+        foreach ($this->roles as $role)
+        {
+            /** @var $role Role */
+            $stringRoles[] = $role->getRole();
+        }
+        return $stringRoles;
+    }
+
+    /**
+     * @param Role $role
+     * @return User
+     */
+    public function setRoles($role)
+    {
+        $this->roles[] = $role;
+        return $this;
     }
 
     /**

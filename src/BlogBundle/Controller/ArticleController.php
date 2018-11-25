@@ -52,6 +52,19 @@ class ArticleController extends Controller
     }
 
     /**
+     * @Route("/myArticles", name="myArticles")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewMyArticles() {
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findBy(['author' => $this->getUser()]);
+
+        return $this->render('article/myArticles.html.twig', ['articles' => $articles]);
+    }
+
+    /**
      * @Route("/article/edit/{id}", name="article_edit")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param $id

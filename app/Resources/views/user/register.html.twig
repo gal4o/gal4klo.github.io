@@ -3,6 +3,13 @@
 {% block body_id 'register' %}
 
 {% block main %}
+    {% for msg in app.session.flashbag.get('info') %}
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            {{ msg }}
+        </div>
+    {% endfor %}
+
     <div class="container body-content span=8 offset=2">
         <div class="well">
             <form class="form-horizontal" action="{{ path('user_register') }}" method="post">
@@ -26,12 +33,12 @@
                             <input type="password" class="form-control" id="user_password" placeholder="Password" name="user[password]" required>
                         </div>
                     </div>
-                    {#<div class="form-group">#}
-                        {#<label class="col-sm-4 control-label" for="user_password_second">Confirm Password</label>#}
-                        {#<div class="col-sm-4">#}
-                            {#<input type="password" class="form-control" id="user_password_second" placeholder="Password" name="user[password][second]" required>#}
-                        {#</div>#}
-                    {#</div>#}
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="user_password_second">Confirm Password</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" id="user_password_second" placeholder="Password" name="user[password][second]" required>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-4">
                             <a class="btn btn-default" href="{{ path('blog_index') }}">Cancel</a>
@@ -39,7 +46,7 @@
                         </div>
                     </div>
 
-                    {#{{  form_row(form._token) }}#}
+                    {{  form_row(form._token) }}
 
                 </fieldset>
             </form>

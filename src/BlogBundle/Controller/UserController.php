@@ -22,9 +22,18 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted()) { //&&$form->isValid()
+            $emailForm = $form->getData()->getEmail();
+            $userForm = $this->getDoctrine()
+                ->getRepository(User::class)
+                ->findOneBy(['email' => $emailForm]);
+
+            if ($userForm !== null) {
+                $this->addFlash('info', "Username with email ". $emailForm . "already taken!");
+                return $this->render('user/register.html.twig', ['form' => $form->createView()]);
+            }
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
-
+            
             $user->setPassword($password);
 
             $roleRepository = $this->getDoctrine()->getRepository(Role::class);
@@ -37,7 +46,8 @@ class UserController extends Controller
             $em->flush();
             return $this->redirectToRoute("security_login");
         }
-        return $this->render('user/register.html.twig');
+        return $this->render('user/register.html.twig',
+            ['form' =>$form->createView()]);
     }
 
     /**

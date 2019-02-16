@@ -57,24 +57,23 @@ class ArticleController extends Controller
         );
     }
 
-    /**
-     * @Route("/articles/create",methods={"POST"} name="rest_api_article_create")
-     * @param Request $request
-     * @return Response
-     */
-    public function createAction(Request $request)
-    {
-        try {
-
-            $this->createNewArticle($request);
-            return new Response(null, Response::HTTP_CREATED);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()],
-                Response::HTTP_BAD_REQUEST,
-                array('content-type' => 'application/json')
-            );
-        }
-    }
+//    /**
+//     * @Route("/articles/create",methods={"POST"} name="rest_api_article_create")
+//     * @param Request $request
+//     * @return Response
+//     */
+//    public function createAction(Request $request)
+//    {
+//        try {
+//            $this->createNewArticle($request);
+//            return new Response(null, Response::HTTP_CREATED);
+//        } catch (\Exception $e) {
+//            return new JsonResponse(['error' => $e->getMessage()],
+//                Response::HTTP_BAD_REQUEST,
+//                array('content-type' => 'application/json')
+//            );
+//        }
+//    }
 
     /**
      *
@@ -117,7 +116,7 @@ class ArticleController extends Controller
         (ArticleType::class, $article, ['method' => $method]);
         $form->submit($params);
         if ($form->isSubmitted()) {
-            $article->setAuthor($user);
+            $article->setAuthor($user->getId());
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
@@ -154,32 +153,32 @@ class ArticleController extends Controller
         }
     }
 
-    /**
-     * @Route("/articles/{id}",methods={"DELETE"} name="rest_api_article_edit")
-     * @param $id
-     * @return Response
-     */
-    public function deleteAction($id)
-    {
-        try {
-            $article = $this->getDoctrine()
-                ->getRepository(Article::class)
-                ->find($id);
-            if ($article === null) {
-                $statusCode = Response::HTTP_NOT_FOUND;
-            } else {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($article);
-                $em->flush();
-
-                $statusCode = Response::HTTP_NO_CONTENT;
-            }
-            return new Response(null, $statusCode);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()],
-                Response::HTTP_BAD_REQUEST,
-                array('content-type' => 'application_json')
-            );
-        }
-    }
+//    /**
+//     * @Route("/articles/{id}",methods={"DELETE"} name="rest_api_article_edit")
+//     * @param $id
+//     * @return Response
+//     */
+//    public function deleteAction($id)
+//    {
+//        try {
+//            $article = $this->getDoctrine()
+//                ->getRepository(Article::class)
+//                ->find($id);
+//            if ($article === null) {
+//                $statusCode = Response::HTTP_NOT_FOUND;
+//            } else {
+//                $em = $this->getDoctrine()->getManager();
+//                $em->remove($article);
+//                $em->flush();
+//
+//                $statusCode = Response::HTTP_NO_CONTENT;
+//            }
+//            return new Response(null, $statusCode);
+//        } catch (\Exception $e) {
+//            return new JsonResponse(['error' => $e->getMessage()],
+//                Response::HTTP_BAD_REQUEST,
+//                array('content-type' => 'application_json')
+//            );
+//        }
+//    }
 }

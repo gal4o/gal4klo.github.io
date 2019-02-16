@@ -15,7 +15,7 @@ class DefaultController extends Controller
     {
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findAll();
+            ->findBy([], ['dateAdded' => 'desc', 'viewsCount' => 'desc']);
         return $this->render('default/index.html.twig', ['articles' => $articles]);
     }
 }

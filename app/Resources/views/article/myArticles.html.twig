@@ -7,13 +7,20 @@
                 <div class="col-md-12">
                     <article>
                         <header>
-                            <h2>{{ article.title }}</h2>
+                           <h2>Title: {{ article.title }}</h2>
                         </header>
 
                         <p>
-                            {{ article.content }}
+                            Content: {{ article.content }}
                         </p>
 
+                        <img src="{{ article.getImage }}" width="400" height="200">
+
+                        {#<p>#}
+                            {#Added on: {{ article.dateAdded|format:"yyy-mm-dd" }}#}
+                        {#</p>#}
+
+                        <p>Views: {{ article.viewsCount }}</p>
                         <footer>
                             <div class="pull-right">
                                     <a class="btn btn-success btn-xs" href="{{ path('article_edit', {'id': article.id}) }}">Edit</a>

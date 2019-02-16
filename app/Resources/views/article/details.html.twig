@@ -1,20 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    {% for msg in app.session.flashbag.get('info') %}
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            {{ msg }}
+        </div>
+    {% endfor %}
+
     <div class="container body-content">
         <div class="row">
             <div class="col-md-12">
                 <article>
                     <header>
-                        <h2>{{ article.title }}</h2>
+                        <h2>Title: {{ article.title }}</h2>
                     </header>
 
                     <p>
-                        {{ article.content }}
+                        Content: {{ article.content }}
                     </p>
 
+                    <img src="{{ article.getImage }}" width="400" height="200">
+
                     <small class="author">
-                        {{ article.author.fullName }}
+                        Author: {{ article.author.fullName }}
                     </small>
 
                     <footer>

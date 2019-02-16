@@ -23,14 +23,16 @@ class ArticleController extends Controller
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
-
         $form->handleRequest($request);
-
+//        var_dump($form); exit();
         if ($form->isSubmitted()&&$form->isValid()) {
             $article->setAuthor($this->getUser());
+            $article->setViewsCount('0');
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
+            $this->addFlash('info', "Article is created successfully!");
+
             return $this->redirectToRoute("blog_index");
         }
 
@@ -48,6 +50,13 @@ class ArticleController extends Controller
         $article = $this->getDoctrine()
             ->getRepository(Article::class)
             ->find($id);
+
+        $article->setViewsCount($article->getViewsCount()+1);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+
         return $this->render('article/details.html.twig', ['article' => $article]);
     }
 
@@ -92,6 +101,8 @@ class ArticleController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
+            $this->addFlash('info', "Article is edited successfully!");
+
             return $this->redirectToRoute('article_view',
                 array('id' => $article->getId()));
         }
@@ -129,6 +140,8 @@ class ArticleController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($article);
             $em->flush();
+            $this->addFlash('info', "Article is deleted successfully!");
+
             return $this->redirectToRoute('blog_index');
         }
         return $this->render('article/delete.html.twig',

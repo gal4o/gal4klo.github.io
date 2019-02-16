@@ -61,10 +61,32 @@ class Article
      */
     private $author;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="viewsCount", type="integer")
+     */
+    private $viewsCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="likesCount", type="integer")
+     */
+    private $likesCount;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string")
+     */
+    private $image;
+
     public function __construct()
     {
         $this->dateAdded = new \DateTime('now');
     }
+
 
     /**
      * @param \BlogBundle\Entity\User $author
@@ -201,6 +223,38 @@ class Article
     public function getDateAdded()
     {
         return $this->dateAdded;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getViewsCount()
+    {
+        return $this->viewsCount;
+    }
+
+    /**
+     * @param integer $viewsCount
+     */
+    public function setViewsCount($viewsCount)
+    {
+        $this->viewsCount = $viewsCount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 }
 

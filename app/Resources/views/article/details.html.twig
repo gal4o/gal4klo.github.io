@@ -20,11 +20,37 @@
                         Content: {{ article.content }}
                     </p>
 
-                    <img src="{{ article.getImage }}" width="400" height="200">
+                    {% if article.image is null %}
+                        <p>No Image</p>
+                    {% else %}
+                        <img src="{{ asset('uploads/images/articles/' ~ article.image) }}" alt="" width="400" height="200" >
+                    {% endif %}
 
                     <small class="author">
                         Author: {{ article.author.fullName }}
                     </small>
+
+                    <p>Likes: {{ article.likesCount }}
+                        <a href="{{ path('article_likes', {'id':article.id}) }}" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                        </a>
+                    </p>
+
+                    <a href="{{ path('add_comment', {'id':article.id}) }}" class="btn btn-info btn-sm">
+                        Add Comment
+                    </a>
+                    <button class="btn btn-success btn-sm" id="btnRate">Rate</button>
+
+                    <div>
+                        <h4>Comments:</h4>
+                        {% for comment in  article.comments %}
+                            <div class="badge">{{ comment.content }}
+                            <small class="author">{{ comment.author.fullName }}</small>
+                            <small class="date">{{ comment.dateAdded|date("d/m/Y") }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {#<button class="btn btn-success btn-sm" id="btnComment">Add Comment</button>#}
 
                     <footer>
                         <div class="pull-right">
@@ -40,5 +66,49 @@
         </div>
     </div>
 
+    {#<script>#}
+
+        {#let formComment = $(`#}
+         {#<form method="post" action="{{ path('add_comment', {'id':article.id}) }}">#}
+            {#<div class="form-group">#}
+                {#<div class="col-sm-6>#}
+                    {#<textarea class="form-control" rows="6" id="comment_content" name="comment[content]"></textarea>#}
+                    {#<input class="btn btn-success btn-sm" type="submit" value="Create" />#}
+                {#</div>#}
+            {#</div>#}
+         {#</form>#}
+{#`);#}
+
+        {#let formRate = $(`#}
+            {#<form method="post">#}
+                {#<div class="form-group">#}
+                    {#<label class="col-sm-4 control-label" for="article_rating">Rate</label>#}
+                    {#<div class="col-sm-6">#}
+                        {#<select name="rate" size="3">#}
+                            {#<option value="1">1</option>#}
+                            {#<option value="2">2</option>#}
+                            {#<option value="3">3</option>#}
+                            {#<option value="4">4</option>#}
+                            {#<option value="5">5</option>#}
+                            {#<option value="6">6</option>#}
+                        {#</select>#}
+                        {#<input class="btn btn-success btn-sm" type="submit" value="Rate" />#}
+                    {#</div>#}
+                {#</div>#}
+            {#</form>#}
+        {#`);#}
+
+        {#$('#btnComment').click(function (e) {#}
+            {#e.preventDefault();#}
+            {#$('#formComment').append(formComment);#}
+            {#$('#formComment').toggle();#}
+        {#})#}
+
+        {#$('#btnRate').click(function (e) {#}
+            {#e.preventDefault();#}
+            {#$('#formRate').append(formRate);#}
+            {#$('#formRate').toggle();#}
+        {#})#}
+    {#</script>#}
 {% endblock %}
 

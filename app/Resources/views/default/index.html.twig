@@ -21,21 +21,25 @@
                             {{ article.summary }}
                         </p>
 
-                        {#{% if {{ article.image }} = null %}#}
-                        <img src="{{ article.getImage }}" width="400" height="200">
-                        {#{% endif %}#}
+                        {% if article.image is null %}
+                            <p>No Image</p>
+                        {% else %}
+                            <img src="{{ asset('uploads/images/articles/' ~ article.image) }}" width="400" height="200" alt="">
+                        {% endif %}
 
                         <small class="author">
                             {{ article.author.fullName }}
                         </small>
 
                         <p>
-                        Views: {{ article.getViewsCount }}
-                        </p><br>
-                        <p>
-                            Likes:
+                            Views: {{ article.getViewsCount }}
                         </p>
-
+                        <p>
+                            Comments: {{ article.comments.count }}
+                        </p>
+                        <p>
+                            Likes: {{ article.likesCount }}
+                        </p>
                         <footer>
                             <div class="pull-right">
                                 <a class="btn btn-default btn-xs"

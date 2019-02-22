@@ -14,13 +14,18 @@
                             Content: {{ article.content }}
                         </p>
 
-                        <img src="{{ article.getImage }}" width="400" height="200">
+                        {% if article.image is null %}
+                            <p>No Image</p>
+                        {% else %}
+                            <img src="{{ asset('uploads/images/articles/' ~ article.image) }}" alt="" width="400" height="200">
+                        {% endif %}
 
-                        {#<p>#}
-                            {#Added on: {{ article.dateAdded|format:"yyy-mm-dd" }}#}
-                        {#</p>#}
+                        <p>
+                            Added on: {{ article.dateAdded|date("d/m/Y") }}
+                        </p>
 
                         <p>Views: {{ article.viewsCount }}</p>
+                        <p>Likes: {{ article.likesCount }}</p>
                         <footer>
                             <div class="pull-right">
                                     <a class="btn btn-success btn-xs" href="{{ path('article_edit', {'id': article.id}) }}">Edit</a>

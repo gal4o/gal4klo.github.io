@@ -78,13 +78,56 @@ class Article
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string")
+     * @ORM\Column(name="image", type="string", nullable=true)
      */
     private $image;
+
+    /**
+     * @var ArrayCollection|Comment[]
+     *
+     * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Comment", mappedBy="article")
+     */
+    private $comments;
 
     public function __construct()
     {
         $this->dateAdded = new \DateTime('now');
+        $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @return Comment[]|ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Comment|null $comment
+     * @return Article
+     */
+    public function addComment(Comment $comment = null)
+    {
+        $this->comments[] = $comment;
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getLikesCount()
+    {
+        return $this->likesCount;
+    }
+
+    /**
+     * @param int $likesCount
+     */
+    public function setLikesCount($likesCount)
+    {
+        $this->likesCount = $likesCount;
     }
 
 

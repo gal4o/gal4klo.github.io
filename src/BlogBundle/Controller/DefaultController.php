@@ -13,6 +13,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        /** @var Article[] $articles */
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
             ->findBy([], ['dateAdded' => 'desc', 'viewsCount' => 'desc']);

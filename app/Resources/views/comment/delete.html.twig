@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <div class="container body-content span=8 offset=2">
+        <div class="well">
+            <form method="post" action="{{ path('comment_edit', {'id':comment.id}) }}">
+                <fieldset>
+                    <legend>Edit Comment</legend>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="comment_content">Content</label>
+
+                        <div class="col-sm-6">
+                        <textarea class="form-control" rows="6" id="comment_content"
+                                  name="comment[content]" disabled>{{ comment.content }}</textarea>
+                        </div>
+
+                        {{ form_row(form._token) }}
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-4">
+                                <a class="btn btn-default" href="{{ path('article_view', {'id':article.id}) }}">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+

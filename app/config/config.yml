@@ -9,6 +9,7 @@ imports:
 parameters:
     locale: en
     article_directory: '%kernel.project_dir%/web/uploads/images/articles/'
+    user_directory: '%kernel.project_dir%/web/uploads/images/users/'
 
 framework:
     #esi: ~

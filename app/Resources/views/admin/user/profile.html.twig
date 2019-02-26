@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id %}
+
+{% endblock %}
+
+{% block main %}
+    <h1>Hello, it is {{ user.fullName }} profile</h1>
+    {% if app.getUser() is {{ user }} or app.getUser().isAdmin()) %}
+    <div class="badge">
+        <p>{{ user.email }}</p>
+        {% for role in user.roles %}
+        <p>{{ role }}</p>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+    <div>
+        <a class="btn btn-default btn-xs" href="{{ path('user_articles', {'id':user.getId}) }}">Articles</a><br>
+        <a class="btn btn-default btn-xs" href="{{ path('user_comments', {'id':user.getId}) }}">Comments</a>
+        <a class="btn btn-success btn-sm" href="{{ path('user_mailbox') }}">
+            <span class="glyphicon glyphicon-envelope"> ({{ user.recipientMessages.count }})</span>
+        </a>
+    </div>
+
+{% endblock %}

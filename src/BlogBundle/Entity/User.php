@@ -66,12 +66,44 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @var ArrayCollection|Message[]
+     * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Message", mappedBy="sender")
+     */
+    private $senders;
+
+    /**
+     * @var ArrayCollection|Message[]
+     * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Message", mappedBy="recipient")
+     */
+    private $recipients;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->roles=new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->senders = new ArrayCollection();
+        $this->recipients = new ArrayCollection();
     }
+
+    /**
+     * @return Message[]|ArrayCollection
+     */
+    public function getSenderMessages()
+    {
+        return $this->senders;
+    }
+
+    /**
+     * @return Message[]|ArrayCollection
+     */
+    public function getRecipientMessages()
+    {
+        return $this->recipients;
+    }
+
+
 
     /**
      * @return Comment[]|ArrayCollection
@@ -101,12 +133,12 @@ class User implements UserInterface
     }
 
     /**
-     * @param Article $article
+     * @param Article $article|Comment $article
      * @return bool
      */
-    public function isAuthor(Article $article)
+    public function isAuthor($article)
     {
-        return $article->getAuthorId() == $this->getId();
+        return $article->getAuthor()->getId() == $this->getId();
     }
 
     /**

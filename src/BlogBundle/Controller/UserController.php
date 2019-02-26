@@ -2,9 +2,11 @@
 
 namespace BlogBundle\Controller;
 
+use BlogBundle\Entity\Message;
 use BlogBundle\Entity\Role;
 use BlogBundle\Entity\User;
 use BlogBundle\Form\UserType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,14 +53,22 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/profile", name="user_profile")
+     * @Route("/profile/{id}", name="user_profile")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function profile(){
-        $id = $this->getUser()->getId();
+    public function profile($id){
+
         $user=$this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
+
+        $unreadMessages = $this->getDoctrine()
+            ->getRepository(Message::class)
+            ->findBy(['recipient' => $user, 'isReader' => false]);
+        $countMsg = count($unreadMessages);
         return $this->render("user/profile.html.twig",
-            ['user' =>$user]);
+            ['user' =>$user, 'count' => $countMsg]);
     }
 }

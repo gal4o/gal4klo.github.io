@@ -25,7 +25,11 @@
               {#integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"#}
               {#crossorigin="anonymous">#}
         <script src="{{ asset('./js/jquery-3.3.1.min.js') }}"></script>
-
+        <script>
+            setTimeout(function () {
+                $('#msg').fadeOut();
+            }, 3000)
+        </script>
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
@@ -48,19 +52,26 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         {% if app.user %}
+                        {% if app.user.isAdmin %}
                             <li>
-                                <a href="{{ path( 'myArticles') }}">
-                                    My Articles
+                                <a href="{{ path( 'admin_index') }}">
+                                    Admin Panel
                                 </a>
                             </li>
+                            {% endif %}
                             <li>
                                 <a href="{{ path('article_create') }}">
                                     Create Article
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ path('user_profile') }}">
+                                <a href="{{ path('user_profile', {'id': app.user.getId}) }}">
                                     My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('user_mailbox') }}">
+                                    <span class="glyphicon glyphicon-envelope"></span>
                                 </a>
                             </li>
                             <li>

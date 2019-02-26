@@ -85,7 +85,7 @@ class Article
     /**
      * @var ArrayCollection|Comment[]
      *
-     * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Comment", mappedBy="article", cascade={"remove"})
      */
     private $comments;
 

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <div class="container body-content">
+        <div class="row">
+            {% for comment in comments %}
+                <div class="col-md-12">
+                    <article>
+                        <header>
+                            <h2>Article Title:<a href="{{ path('article_view', {'id':comment.article.getId}) }}"> {{ comment.article.title }}</a></h2>
+                        </header>
+
+                        <p>
+                            Content: {{ comment.content }}
+                        </p>
+
+                        <p>
+                            Added on: {{ comment.dateAdded|date("d/m/Y") }}
+                        </p>
+                        {% if app.getUser() and (app.getUser().isAuthor(comment) or app.getUser().isAdmin()) %}
+                        <footer>
+                            <div class="pull-right">
+                                <a class="btn btn-success btn-xs" href="{{ path('comment_edit', {'id': comment.id}) }}">Edit</a>
+                                <a class="btn btn-danger btn-xs" href="{{ path('comment_delete', {'id': comment.id}) }}">Delete</a>
+                                <a class="btn btn-default btn-xs" href="{{ path('user_profile', {'id': comment.author.id}) }}">back &raquo;</a>
+                            </div>
+                        </footer>
+                        {% endif %}
+                    </article>
+                </div>
+            {% else %}
+                <p>
+                    Empty list
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

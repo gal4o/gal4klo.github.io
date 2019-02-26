@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {% for msg in app.session.flashbag.get('info') %}
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            {{ msg }}
+        </div>
+    {% endfor %}
+
+    <div class="container body-content">
+        <div class="row">
+            {% for user in users %}
+                <div>
+                   User: <a href="{{ path('admin_user_profile', {'id': user.id}) }}">{{ user.fullName }}</a>
+
+                    {#<button class="btn-success">Make Admin</button>#}
+                    {#<button class="btn-danger">ban</button>#}
+
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

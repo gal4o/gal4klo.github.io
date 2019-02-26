@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {% for msg in app.session.flashbag.get('message') %}
+        <div id="msg" class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            {{ msg }}
+        </div>
+    {% endfor %}
+
+    <p>From: {{ message.sender.fullName }}</p>
+    <p>To: {{ message.recipient.fullName }}</p>
+    <p>About: {{ message.about }}</p>
+    <p>Content: {{ message.content }}</p>
+    <small>Date: {{ message.dateAdded|date("d/m/Y g:ia", 'Europe/Sofia') }}
+    </small><br>
+
+    <button class="btn btn-success btn-xs" id="btnMsg">Add</button>
+    <div id="formMsg"></div>
+    <script>
+        let formMsg = $(`
+            <form class="form-horizontal"  method="POST">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="message_about">About</label>
+                        <div class="col-sm-4 ">
+                            <input type="text" class="form-control" id="message_about" placeholder="Message About"
+                                   name="message[about]">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="Message_content">Content</label>
+                        <div class="col-sm-6">
+                        <textarea class="form-control" rows="6" id="message_content"
+                                  name="message[content]"></textarea>
+                        </div>
+                    </div>
+
+                    {{ form_row(form._token) }}
+
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <a class="btn btn-default" href="{{ path('blog_index') }}">Cancel</a>
+                            <input type="submit" class="btn btn-primary" value="Send">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        `);
+
+        $('#btnMsg').click(function (e) {
+            e.preventDefault();
+            $('#formMsg').append(formMsg);
+            $('#formMsg').toggle();
+        })
+    </script>
+{% endblock %}
+

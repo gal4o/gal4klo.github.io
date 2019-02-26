@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <article>
                         <header>
-                           <h2>Title: {{ article.title }}</h2>
+                            <h2>Title: <a href="{{ path('article_view', {'id':article.getId}) }}">{{ article.title }}</a></h2>
                         </header>
 
                         <p>
@@ -26,15 +26,20 @@
 
                         <p>Views: {{ article.viewsCount }}</p>
                         <p>Likes: {{ article.likesCount }}</p>
+                        <p>Comments: {{ article.comments.count }}</p>
+                        {% if app.getUser() and (app.getUser().isAuthor(article) or app.getUser().isAdmin()) %}
                         <footer>
                             <div class="pull-right">
                                     <a class="btn btn-success btn-xs" href="{{ path('article_edit', {'id': article.id}) }}">Edit</a>
                                     <a class="btn btn-danger btn-xs" href="{{ path('article_delete', {'id': article.id}) }}">Delete</a>
-                                <a class="btn btn-default btn-xs" href="{{ path('blog_index') }}">back &raquo;</a>
+                                    <a class="btn btn-default btn-xs" href="{{ path('user_profile', {'id':article.getAuthor.getId}) }}">back &raquo;</a>
                             </div>
                         </footer>
+                        {% endif %}
                     </article>
+                    <hr>
                 </div>
+
             {% else %}
                 <p>
                     Empty list

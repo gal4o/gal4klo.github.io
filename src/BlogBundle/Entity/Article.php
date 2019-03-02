@@ -69,11 +69,10 @@ class Article
     private $viewsCount;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="likesCount", type="integer")
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="BlogBundle\Entity\User", mappedBy="likes")
      */
-    private $likesCount;
+    private $likers;
 
     /**
      * @var string
@@ -93,6 +92,35 @@ class Article
     {
         $this->dateAdded = new \DateTime('now');
         $this->comments = new ArrayCollection();
+        $this->likers = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public function getLikers()
+    {
+        return $this->likers;
+    }
+
+    /**
+     * @param User $user
+     * @return Article
+     */
+    public function setLikers(User $user)
+    {
+        $this->likers[] = $user;
+        return $this;
+    }
+
+    /**
+     * @param User $likes
+     * @return Article
+     */
+    public function removeLikers(User $likes)
+    {
+        $this->getLikers()->removeElement($likes);
+        return $this;
     }
 
     /**
@@ -112,24 +140,6 @@ class Article
         $this->comments[] = $comment;
         return $this;
     }
-
-
-    /**
-     * @return int
-     */
-    public function getLikesCount()
-    {
-        return $this->likesCount;
-    }
-
-    /**
-     * @param int $likesCount
-     */
-    public function setLikesCount($likesCount)
-    {
-        $this->likesCount = $likesCount;
-    }
-
 
     /**
      * @param \BlogBundle\Entity\User $author

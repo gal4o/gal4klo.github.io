@@ -15,10 +15,11 @@
     <small>Date: {{ message.dateAdded|date("d/m/Y g:ia", 'Europe/Sofia') }}
     </small><br>
 
-    <button class="btn btn-success btn-xs" id="btnMsg">Add</button>
+    <button class="btn btn-success btn-lg" id="btnMsg">Send message</button>
     <div id="formMsg"></div>
     <script>
         let formMsg = $(`
+
             <form class="form-horizontal"  method="POST">
                 <fieldset>
                     <div class="form-group">

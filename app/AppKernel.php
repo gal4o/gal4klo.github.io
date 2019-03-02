@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new BlogBundle\BlogBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new \BlogRestApiBundle\BlogRestApiBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

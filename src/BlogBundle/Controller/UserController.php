@@ -64,11 +64,32 @@ class UserController extends Controller
             ->getRepository(User::class)
             ->find($id);
 
-        $unreadMessages = $this->getDoctrine()
-            ->getRepository(Message::class)
-            ->findBy(['recipient' => $user, 'isReader' => false]);
-        $countMsg = count($unreadMessages);
+            $unreadMessages = $this->getDoctrine()
+                ->getRepository(Message::class)
+                ->findBy(['recipient' => $user, 'isReader' => false]);
+            $countMsg = count($unreadMessages);
+
         return $this->render("user/profile.html.twig",
             ['user' =>$user, 'count' => $countMsg]);
+    }
+
+    /**
+     * @Route("user/mailbox", name="user_mailbox")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     */
+    public function mailBox() {
+        /** @var Message[] $inMessages */
+        $inMessages = $this
+            ->getDoctrine()
+            ->getRepository(Message::class)
+            ->findBy(['recipient' =>$this->getUser()], ['dateAdded' => 'desc']);
+        /** @var Message[] $outMessages */
+        $outMessages = $this
+            ->getDoctrine()
+            ->getRepository(Message::class)
+            ->findBy(['sender' =>$this->getUser()], ['dateAdded' => 'desc']);
+
+        return $this->render('user/mailbox.html.twig',
+            ['inMessages'=>$inMessages, 'outMessages' => $outMessages]);
     }
 }

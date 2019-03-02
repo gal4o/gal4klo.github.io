@@ -28,15 +28,20 @@
 
                     <small class="author">
                         Author: {{ article.author.fullName }}
-                        <a href="{{ path('user_message', {'id':article.author.id }}" class="btn btn-info btn-xs">
+                        <a href="{{ path('user_message', {'id':article.author.id })}}" class="btn btn-info btn-xs">
                             Send Message</a>
                     </small><br>
 
-                    <p>Likes: {{ article.likesCount }}
+                    <p>Likes: {{ article.likers.count }}
                         <a href="{{ path('article_likes', {'id':article.id}) }}" class="btn btn-info btn-xs">
+                            {% if app.User.isLiker(article) %}
+                            <span class="glyphicon glyphicon-thumbs-down"></span> Dislike
+                        </a><br>
+                            {% else %}
                             <span class="glyphicon glyphicon-thumbs-up"></span> Like
                         </a><br>
-                    </p>
+                        {% endif %}
+
                     <p>Rating: 0 <button class="btn btn-success btn-xs" id="btnRate">Rate</button></p>
                     <div id="formRate"></div>
                         <h4>Comments: {{ article.comments.count }}</h4>

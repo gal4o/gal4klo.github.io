@@ -4,6 +4,7 @@ namespace BlogBundle\Controller;
 
 use BlogBundle\Entity\Article;
 use BlogBundle\Entity\Comment;
+use BlogBundle\Entity\Message;
 use BlogBundle\Entity\User;
 use BlogBundle\Form\ArticleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -70,9 +71,10 @@ class AdminController extends Controller
      * @Route("/user/articles/{id}", name="user_articles")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param $id
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewUserArticles($id) {
+    public function viewUserArticles($id, Request $request) {
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->findBy(['id' => $id]);
@@ -82,16 +84,24 @@ class AdminController extends Controller
             ->getRepository(Article::class)
             ->findBy(['author' => $user]);
 
-        return $this->render('article/myArticles.html.twig', ['articles' => $articles]);
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $articles, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            3/*limit per page*/
+        );
+
+        return $this->render('article/myArticles.html.twig', ['pagination' => $pagination]);
     }
 
     /**
      * @Route("/user/comments/{id}", name="user_comments")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param $id
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewUserComments($id) {
+    public function viewUserComments($id, Request $request) {
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->findBy(['id' => $id]);
@@ -101,6 +111,39 @@ class AdminController extends Controller
             ->getRepository(Comment::class)
             ->findBy(['author' => $user]);
 
-        return $this->render('comment/userComments.html.twig', ['comments' => $comments]);
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $comments, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            4/*limit per page*/
+        );
+        return $this->render('comment/userComments.html.twig', ['pagination' =>$pagination]);
+    }
+
+    /**
+     * @Route("/user/mailbox{id}", name="admin_user_mailbox")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function mailBox($id) {
+        $user = $this
+            ->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+
+        /** @var Message[] $inMessages */
+        $inMessages = $this
+            ->getDoctrine()
+            ->getRepository(Message::class)
+            ->findBy(['recipient' => $user], ['dateAdded' => 'desc']);
+        /** @var Message[] $outMessages */
+        $outMessages = $this
+            ->getDoctrine()
+            ->getRepository(Message::class)
+            ->findBy(['sender' => $user], ['dateAdded' => 'desc']);
+
+        return $this->render('/admin/user/mailbox.html.twig',
+            ['inMessages'=>$inMessages, 'outMessages' => $outMessages]);
     }
 }

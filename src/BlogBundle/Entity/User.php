@@ -4,6 +4,7 @@ namespace BlogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -73,6 +74,15 @@ class User implements UserInterface
     private $senders;
 
     /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="BlogBundle\Entity\Article", inversedBy="likers")
+     * @ORM\JoinTable(name="users_likes",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
+     *     )
+     */
+    private $likes;
+    /**
      * @var ArrayCollection|Message[]
      * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Message", mappedBy="recipient")
      */
@@ -85,6 +95,51 @@ class User implements UserInterface
         $this->comments = new ArrayCollection();
         $this->senders = new ArrayCollection();
         $this->recipients = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+    }
+
+    /**
+     *
+     * @param Article $article
+     * @return bool
+     */
+    public function isLiker(Article $article)
+    {
+        $currentUserId = $this->getId();
+        foreach ($article->getLikers() as $user) {
+            if ($user->getId()===$currentUserId) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getLikes()
+    {
+        return $this->likes;
+    }
+
+    /**
+     * @param Article $likes
+     * @return User
+     */
+    public function addLikes(Article $likes)
+    {
+        $this->likes[] = $likes;
+        return $this;
+    }
+
+    /**
+     * @param Article $likes
+     * @return User
+     */
+    public function removeLikes(Article $likes)
+    {
+        $this->getLikes()->removeElement($likes);
+        return $this;
     }
 
     /**

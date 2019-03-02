@@ -3,6 +3,7 @@
 namespace BlogBundle\Controller;
 
 use BlogBundle\Entity\Article;
+use BlogBundle\Entity\User;
 use BlogBundle\Form\ArticleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -47,7 +48,6 @@ class ArticleController extends Controller
                 }
             }
 
-            $article->setLikesCount('0');
             $article->setAuthor($this->getUser());
             $article->setViewsCount('0');
             $em = $this->getDoctrine()->getManager();
@@ -87,15 +87,23 @@ class ArticleController extends Controller
     /**
      * @Route("/myArticles", name="myArticles")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewMyArticles() {
+    public function viewMyArticles(Request $request) {
         /** @var Article[] $articles */
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
             ->findBy(['author' => $this->getUser()]);
 
-        return $this->render('article/myArticles.html.twig', ['articles' => $articles]);
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $articles, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            3/*limit per page*/
+        );
+
+        return $this->render('article/myArticles.html.twig', ['pagination' => $pagination]);
     }
 
     /**
@@ -203,7 +211,28 @@ class ArticleController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function likes($id) {
+        /** @var User $user */
+        $user = $this->getUser();
+        $article = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->find($id);
+        if ($user->isLiker($article)) {
+            $user->removeLikes($article);
+            $article->removeLikers($user);
+            $this->addFlash("info", "You are disliked this article!");
+        } else{
+            $article->setLikers($user);
+            $user->addLikes($article);
+            $this->addFlash("info", "You are liked this article!");
 
-        return $this->redirectToRoute('blog_index');
+        }
+
+        $em = $this->getDoctrine()
+            ->getManager();
+//        $em->persist($article);
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('article_view',
+            ['id' => $id]);
     }
 }

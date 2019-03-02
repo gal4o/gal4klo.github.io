@@ -3,7 +3,7 @@
 {% block main %}
     <div class="container body-content">
         <div class="row">
-            {% for comment in comments %}
+            {% for comment in pagination %}
                 <div class="col-md-12">
                     <article>
                         <header>
@@ -35,5 +35,9 @@
             {% endfor %}
         </div>
     </div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
 {% endblock %}
 

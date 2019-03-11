@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Hello, {{ user.fullName }}</h1>
+    <h1>Hello, this is {{ user.fullName }} profile</h1>
 
     <div>
         <a class="btn btn-success btn-sm" href="{{ path('user_articles', {'id':user.getId}) }}">Articles</a>
         <a class="btn btn-success btn-sm" href="{{ path('user_comments', {'id':user.getId}) }}">Comments</a>
-        <a class="btn btn-success btn-sm" href="{{ path('user_mailbox') }}">
-            <span class="glyphicon glyphicon-envelope"> ({{ count }})</span>
-        </a>
+        {#<a class="btn btn-success btn-sm" href="{{ path('user_mailbox') }}">#}
+            {#<span class="glyphicon glyphicon-envelope"> ({{ count }})</span>#}
+        {#</a>#}
     </div>
 {% endblock %}
 

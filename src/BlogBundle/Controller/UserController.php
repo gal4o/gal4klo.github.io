@@ -23,7 +23,7 @@ class UserController extends Controller
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted()) { //&&$form->isValid()
+        if($form->isSubmitted()&&$form->isValid()) { //
             $emailForm = $form->getData()->getEmail();
             $userForm = $this->getDoctrine()
                 ->getRepository(User::class)
@@ -48,6 +48,8 @@ class UserController extends Controller
             $em->flush();
             return $this->redirectToRoute("security_login");
         }
+
+
         return $this->render('user/register.html.twig',
             ['form' =>$form->createView()]);
     }
@@ -59,7 +61,7 @@ class UserController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function profile($id){
-
+        /** @var User $user */
         $user=$this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);

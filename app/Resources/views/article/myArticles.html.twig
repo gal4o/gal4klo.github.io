@@ -25,7 +25,7 @@
                         </p>
 
                         <p>Views: {{ article.viewsCount }}</p>
-                        <p>Likes: {{ article.likesCount }}</p>
+                        <p>Likes: {{ article.getLikers.count() }}</p>
                         <p>Comments: {{ article.comments.count }}</p>
                         {% if app.getUser() and (app.getUser().isAuthor(article) or app.getUser().isAdmin()) %}
                         <footer>

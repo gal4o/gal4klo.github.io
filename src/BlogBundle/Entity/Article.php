@@ -4,6 +4,7 @@ namespace BlogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Article
@@ -23,6 +24,14 @@ class Article
     private $id;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "This value is too short.",
+     *      maxMessage = "This value is too long."
+     * )
+     *
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
@@ -30,8 +39,12 @@ class Article
     private $title;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "This value is too short.",
+     * )
      * @var string
-     *
      * @ORM\Column(name="content", type="text")
      */
     private $content;

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -25,6 +26,11 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Email(
+     *     message = "This email is not a valid.",
+     *     checkMX = true
+     * )
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
@@ -32,6 +38,14 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "This value is too short.",
+     *      maxMessage = "This value is too long."
+     * )
+     *
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
@@ -39,6 +53,18 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "This value is too short.",
+     *      maxMessage = "This value is too long."
+     * )
+     * @Assert\Regex(
+     *     pattern="/[A-Za-z0-9 ]+/",
+     *     match=false,
+     *     message="Your name cannot contain a number"
+     * )
      * @var string
      *
      * @ORM\Column(name="fullName", type="string", length=255)

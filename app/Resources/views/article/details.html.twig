@@ -27,7 +27,7 @@
                     {% endif %}
 
                     <small class="author">
-                        Author: {{ article.author.fullName }}
+                        Author: <a href="{{ path('user_profile', {'id': article.author.id}) }}">{{ article.author.fullName }}</a>
                         <a href="{{ path('user_message', {'id':article.author.id })}}" class="btn btn-info btn-xs">
                             Send Message</a>
                     </small><br>
@@ -41,6 +41,7 @@
                             <span class="glyphicon glyphicon-thumbs-up"></span> Like
                         </a><br>
                         {% endif %}
+                    </p>
 
                     <p>Rating: 0 <button class="btn btn-success btn-xs" id="btnRate">Rate</button></p>
                     <div id="formRate"></div>

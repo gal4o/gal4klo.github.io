@@ -28,7 +28,7 @@
                         {% endif %}
 
                         <small class="author">
-                            {{ article.author.fullName }}
+                            Author: <a href="{{ path('user_profile', {'id':article.getAuthor.getId()}) }}">{{ article.author.fullName }}</a>
                         </small>
 
                         <p>

@@ -3,6 +3,7 @@
 namespace BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message
@@ -22,6 +23,7 @@ class Message
     private $id;
 
     /**
+     * @Assert\NotNull()
      * @var string
      *
      * @ORM\Column(name="about", type="string", length=255)
@@ -29,6 +31,7 @@ class Message
     private $about;
 
     /**
+     * @Assert\NotNull()
      * @var string
      *
      * @ORM\Column(name="content", type="text")

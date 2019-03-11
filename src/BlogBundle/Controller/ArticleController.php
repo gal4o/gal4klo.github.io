@@ -64,6 +64,7 @@ class ArticleController extends Controller
 
     /**
      * @Route("/article/{id}", name="article_view")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */

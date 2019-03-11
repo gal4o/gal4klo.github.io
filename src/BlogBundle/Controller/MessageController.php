@@ -31,7 +31,7 @@ class MessageController extends Controller
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()&&$form->isValid()){
             $message->setSender($currentUser)
                 ->setRecipient($recipient)
                 ->setIsReader(false);
@@ -95,7 +95,7 @@ class MessageController extends Controller
             $sendMessage = new Message();
             $form = $this->createForm(MessageType::class, $sendMessage);
             $form->handleRequest($request);
-            if($form->isSubmitted()){
+            if($form->isSubmitted()&&$form->isValid()){
                 $sendMessage
                     ->setSender($this->getUser())
                     ->setRecipient($message->getSender())
